@@ -1,5 +1,5 @@
 import React from 'react';
-import Folder from './Folder';
+import Folder from './Folders/Folder';
 import {BrowserRouter, Route, Link} from 'react-router-dom';
 
 class App extends React.Component{

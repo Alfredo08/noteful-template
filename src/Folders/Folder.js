@@ -1,5 +1,5 @@
 import React from 'react';
-import Note from './Note';
+import Note from './../Notes/Note';
 
 function Folder( props ){
     console.log( props )
