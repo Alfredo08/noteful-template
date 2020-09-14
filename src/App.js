@@ -1,64 +1,46 @@
 import React from 'react';
-import Drink from './Drink';
+import {Route, Link} from 'react-router-dom';
+import Profile from './Profile';
+import AppContext from './AppContext';
+import HobbyForm from './HobbyForm';
 
 class App extends React.Component{
-  constructor( props ){
-    super( props );
-    this.state = {
-      drinks : [],
-      baseURL : "https://www.thecocktaildb.com/api/json/v1/1/search.php?s="
-    }
+
+  state = {
+    hobbies : ['program', 'dance', 'sing'],
+    name : "Danielle"
   }
 
-  updateDrinks = (data) =>{
+  addHobby = ( newHobby ) => {
     this.setState({
-      drinks : data
-    });
+      hobbies : [...this.state.hobbies, newHobby]
+    })
   }
 
-  getDrinks = ( event ) => {
-    event.preventDefault();
-    
-    const drinkName = event.target.drinkName.value;
-    const url = this.state.baseURL + drinkName;
+  render(){
+    const contextValues = {
+      hobbies : this.state.hobbies,
+      name : this.state.name,
+      addHobby : this.addHobby
+    };
 
-    fetch( url )
-      .then( response => {
-        if( response.ok ){
-          return response.json();
-        }
-        throw new Error( "Something went wrong" );
-      })
-      .then( repsonseJSON => {
-        this.updateDrinks( repsonseJSON.drinks );
-      })
-      .catch( err => {
-        console.log( err.message );
-      });
-  }
-
-  render = () => {
-    return (
-      <div>
-        <form onSubmit={this.getDrinks}>
-          <label> Drink name: </label>
-          <input type="text" id="drinkName" />
-          <button type="submit">
-            Search
-          </button>
-        </form>
-        <ul>
-          {
-            this.state.drinks.map( ( drink, index ) => {
-              return ( 
-                <li key={index}>
-                  <Drink drink={drink}/> 
-                </li>
-              );
-            })
-          }
-        </ul>
-      </div>
+    return(
+      <AppContext.Provider value={contextValues}>
+        <h1>
+          Hello there welcome to our website
+        </h1>
+        <nav>
+          <Link to="/profile">
+            Profile
+          </Link>
+          <Link to="/add-hobby">
+            Add Hobby
+          </Link>
+        </nav>
+        
+        <Route path="/profile" component={ Profile }/>
+        <Route path="/add-hobby" component={ HobbyForm }/>
+      </AppContext.Provider>
     );
   }
 }
